@@ -17,15 +17,20 @@ export default class Killaura extends Module {
         }
     }
 
+    getRandomBodyPart () {
+        const bodyParts = ["HeadMesh", "BodyMesh", "ArmLeftMesh", "ArmRightMesh", "LegLeftMesh", "LegRightMesh"];
+        return bodyParts[Math.floor(Math.random() * bodyParts.length)];
+    }
+
     tryKill () {
         let playerPos = noaUtils.getPosition(1);
-        noaUtils.playerList.forEach(function (player) {
+        noaUtils.playerList.forEach((player) => {
             let targetPosition = noaUtils.getPosition(player);
             if (!targetPosition) return;
 
             if (parseFloat(mathUtils.distanceBetweenSqrt(playerPos, targetPosition)) <= 7) {
                 let lookPos = mathUtils.normalizeVector([targetPosition[0] - playerPos[0], targetPosition[1] - playerPos[1], targetPosition[2] - playerPos[2]]);
-                noaUtils.doAttack(lookPos, player.toString(), "BodyMesh");
+                noaUtils.doAttack(lookPos, player.toString(), this.getRandomBodyPart());
 
                 if (noaUtils.getHeldItem(1).trySwingBlock) {
                     noaUtils.getHeldItem(1).trySwingBlock();
