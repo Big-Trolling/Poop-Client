@@ -2,12 +2,20 @@ import Killaura from "./Modules/Killaura";
 import Spider from "./Modules/Spider";
 import Button from "./UI/Button";
 import hooks from "./Utils/hooks";
+import noaUtils from "./Utils/noaUtils";
 
 hooks.init();
 
 let modules = [ new Spider, new Killaura ];
 
 function render () {
+    if (noaUtils.safeGetHeldItem(1) && !noaUtils.doAttack) {
+        let heldItem = noaUtils.safeGetHeldItem(1);
+        if (heldItem.doAttack) {
+            noaUtils.doAttack = heldItem.doAttack.bind(heldItem);
+        }
+    }
+
     modules.forEach(module => {
         if (module.isEnabled && module.onRender) {
             module.onRender();
