@@ -9,13 +9,6 @@ hooks.init();
 let modules = [ new Spider, new Killaura ];
 
 function render () {
-    if (noaUtils.safeGetHeldItem(1) && !noaUtils.doAttack) {
-        let heldItem = noaUtils.safeGetHeldItem(1);
-        if (heldItem.doAttack) {
-            noaUtils.doAttack = heldItem.doAttack.bind(heldItem);
-        }
-    }
-
     modules.forEach(module => {
         if (module.isEnabled && module.onRender) {
             module.onRender();

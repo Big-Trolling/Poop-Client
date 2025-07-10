@@ -23,7 +23,7 @@ export default {
         return objUtils.values(hooks.noa.entities)[39];
     },
 
-    safeGetHeldItem (id) {
+    safeGetHeldItem(id) {
         let heldItem;
         try {
             heldItem = this.getHeldItem(id);
@@ -33,6 +33,12 @@ export default {
 
     get playerList() {
         return Object.values(hooks.noa.bloxd.getPlayerIds()).filter(player => player !== 1 && this.safeGetHeldItem(player)).map(id => parseInt(id));
+    },
+
+    get doAttack () {
+        let heldItem = this.safeGetHeldItem(1);
+        let doAttack = heldItem?.doAttack || heldItem.breakingItem.doAttack;
+        return doAttack.bind(heldItem);
     },
 
     touchingWall() {

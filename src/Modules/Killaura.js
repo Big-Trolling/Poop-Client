@@ -1,15 +1,23 @@
-import hooks from "../Utils/hooks";
 import mathUtils from "../Utils/mathUtils";
 import noaUtils from "../Utils/noaUtils";
-import objUtils from "../Utils/objUtils";
 import Module from "./Module";
 
 export default class Killaura extends Module {
     constructor () {
         super("Killaura");
+        this.lastExecutionTime = null;
+        this.delay = 500;
     }
 
     onRender () {
+        const currentTime = Date.now();
+        if (currentTime - this.lastExecutionTime >= this.delay) {
+            this.lastExecutionTime = currentTime;
+            this.tryKill();
+        }
+    }
+
+    tryKill () {
         let playerPos = noaUtils.getPosition(1);
         noaUtils.playerList.forEach(function (player) {
             let targetPosition = noaUtils.getPosition(player);
