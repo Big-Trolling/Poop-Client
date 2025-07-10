@@ -29,5 +29,20 @@ export default {
         }
 
         return result;
+    },
+
+    assign(target, ...sources) {
+        const to = Object(target);
+
+        for (let i = 0; i < sources.length; i++) {
+            const source = sources[i];
+            if (source != null) {
+                for (const key in source) {
+                    to[key] = source[key];
+                }
+            }
+        }
+
+        return to;
     }
 }

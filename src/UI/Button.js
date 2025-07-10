@@ -1,3 +1,5 @@
+import objUtils from "../Utils/objUtils";
+
 export default class Button {
     constructor(name, x, y, onToggle = () => {}) {
         this.name = name;
@@ -15,7 +17,7 @@ export default class Button {
 
         this.circle = document.createElement('div');
         this.circle.textContent = name;
-        Object.assign(this.circle.style, {
+        objUtils.assign(this.circle.style, {
             position: 'fixed',
             top: `${y}px`,
             left: `${x}px`,
