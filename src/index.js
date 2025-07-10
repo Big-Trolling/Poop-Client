@@ -9,7 +9,7 @@ let modules = [ new Spider, new Killaura ];
 
 function render () {
     modules.forEach(module => {
-        if (module.isEnabled) {
+        if (module.isEnabled && module.onRender) {
             module.onRender();
         }
     })
