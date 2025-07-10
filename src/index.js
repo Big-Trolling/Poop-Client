@@ -1,12 +1,14 @@
+import AntiSpike from "./Modules/AntiSpike";
+import Jesus from "./Modules/Jesus";
 import Killaura from "./Modules/Killaura";
 import Spider from "./Modules/Spider";
 import Button from "./UI/Button";
 import hooks from "./Utils/hooks";
-import noaUtils from "./Utils/noaUtils";
 
 hooks.init();
+window.dih = hooks;
 
-let modules = [ new Spider, new Killaura ];
+let modules = [ new Spider, new Killaura, new Jesus, new AntiSpike ];
 
 function render () {
     modules.forEach(module => {
@@ -22,5 +24,5 @@ render();
 let UIOffset = 100;
 modules.forEach(module => {
     new Button(module.name, UIOffset, UIOffset, module.toggle.bind(module));
-    UIOffset += 100;
+    UIOffset += 50;
 })
