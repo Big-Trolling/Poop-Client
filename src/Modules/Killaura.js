@@ -29,12 +29,17 @@ export default class Killaura extends Module {
             if (!targetPosition) return;
 
             if (parseFloat(mathUtils.distanceBetweenSqrt(playerPos, targetPosition)) <= 7) {
-                let lookPos = mathUtils.normalizeVector([targetPosition[0] - playerPos[0], targetPosition[1] - playerPos[1], targetPosition[2] - playerPos[2]]);
-                noaUtils.doAttack(lookPos, player.toString(), this.getRandomBodyPart());
 
-                if (noaUtils.getHeldItem(1).trySwingBlock) {
+                if (noaUtils.getHeldItem(1)?.trySwingBlock) {
                     noaUtils.getHeldItem(1).trySwingBlock();
                 }
+
+                if (noaUtils.getMoveState(1)?.setArmsAreSwinging) {
+                    noaUtils.getMoveState(1).setArmsAreSwinging(); 
+                }
+
+                let lookPos = mathUtils.normalizeVector([targetPosition[0] - playerPos[0], targetPosition[1] - playerPos[1], targetPosition[2] - playerPos[2]]);
+                noaUtils.doAttack(lookPos, player.toString(), this.getRandomBodyPart());
             }
         })
     }

@@ -7,6 +7,10 @@ export default {
         return objUtils.values(hooks.noa.entities)[28](id);
     },
 
+    getMoveState (id) {
+        return objUtils.values(hooks.noa.entities)[36](id);
+    },
+
     get registry () {
         return objUtils.values(hooks.noa)[17];  
     },
