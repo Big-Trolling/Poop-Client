@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build": "esbuild src/index.js --minify --bundle --outfile=dist/poop.min.js",
+    "watch": "esbuild src/index.js --minify --bundle --outfile=dist/poop.min.js --watch"
+  },
+  "dependencies": {
+    "esbuild": "^0.25.5"
+  }
+}
