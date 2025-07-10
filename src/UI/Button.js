@@ -6,17 +6,17 @@ export default class Button {
         this.onToggle = onToggle;
         this.isActive = false;
         this.isDragging = false;
+        this.dragThreshold = 10;
 
         this.activeColor = "green";
         this.inactiveColor = "red";
 
         this.wrapper = document.createElement('div');
-        this.shadow = this.wrapper.attachShadow({
-            mode: 'closed'
-        });
+        this.shadow = this.wrapper.attachShadow({ mode: 'closed' });
 
         this.circle = document.createElement('div');
         this.circle.textContent = name;
+
         objUtils.assign(this.circle.style, {
             position: 'fixed',
             top: `${y}px`,
@@ -47,37 +47,87 @@ export default class Button {
     }
 
     attachEvents() {
+        let startX, startY, moved = false;
+
+        // prevent toggling on drag
         this.circle.addEventListener('click', (e) => {
-            this.toggle();
+            if (!moved) {
+                this.toggle();
+            }
+            moved = false;
             e.stopPropagation();
         });
 
         this.circle.addEventListener('mousedown', (e) => {
-            this.isDragging = true;
-            const rect = this.circle.getBoundingClientRect();
-            this.offsetX = e.clientX - rect.left;
-            this.offsetY = e.clientY - rect.top;
-            this.circle.style.cursor = 'grabbing';
-            e.preventDefault();
+            moved = false;
+            this.startDrag(e.clientX, e.clientY);
+            startX = e.clientX;
+            startY = e.clientY;
 
             const onMove = (e) => {
                 if (!this.isDragging) return;
-                this.circle.style.left = `${e.clientX - this.offsetX}px`;
-                this.circle.style.top = `${e.clientY - this.offsetY}px`;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                if (Math.hypot(dx, dy) > this.dragThreshold) moved = true;
+                this.drag(e.clientX, e.clientY);
             };
 
             const onUp = () => {
-                if (this.isDragging) {
-                    this.isDragging = false;
-                    this.circle.style.cursor = 'grab';
-                }
-                this.wrapper.removeEventListener('mousemove', onMove);
-                this.wrapper.removeEventListener('mouseup', onUp);
+                this.endDrag(onMove, onUp, 'mouse');
             };
 
-            this.wrapper.addEventListener('mousemove', onMove);
-            this.wrapper.addEventListener('mouseup', onUp);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onUp);
         });
+
+        this.circle.addEventListener('touchstart', (e) => {
+            const t = e.touches[0];
+            moved = false;
+            startX = t.clientX;
+            startY = t.clientY;
+            this.startDrag(startX, startY);
+
+            const onMove = (e) => {
+                const t = e.touches[0];
+                const dx = t.clientX - startX;
+                const dy = t.clientY - startY;
+                if (Math.hypot(dx, dy) > this.dragThreshold) moved = true;
+                this.drag(t.clientX, t.clientY);
+            };
+
+            const onEnd = () => {
+                this.endDrag(onMove, onEnd, 'touch');
+            };
+
+            window.addEventListener('touchmove', onMove, { passive: false });
+            window.addEventListener('touchend', onEnd);
+        }, { passive: false });
+    }
+
+    startDrag(x, y) {
+        this.isDragging = true;
+        const rect = this.circle.getBoundingClientRect();
+        this.offsetX = x - rect.left;
+        this.offsetY = y - rect.top;
+        this.circle.style.cursor = 'grabbing';
+    }
+
+    drag(x, y) {
+        if (!this.isDragging) return;
+        this.circle.style.left = `${x - this.offsetX}px`;
+        this.circle.style.top = `${y - this.offsetY}px`;
+    }
+
+    endDrag(onMove, onEnd, type) {
+        this.isDragging = false;
+        this.circle.style.cursor = 'grab';
+        if (type === 'mouse') {
+            window.removeEventListener('mousemove', onMove);
+            window.removeEventListener('mouseup', onEnd);
+        } else {
+            window.removeEventListener('touchmove', onMove);
+            window.removeEventListener('touchend', onEnd);
+        }
     }
 
     toggle() {
