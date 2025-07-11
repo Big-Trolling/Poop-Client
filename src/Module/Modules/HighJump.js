@@ -9,9 +9,7 @@ export default class HighJump extends Module {
     }
 
     onEnable () {
-        let compStorage = objUtils.values(hooks.noa.entities)[2];
-        let velocity = objUtils.values(compStorage.physics.list[0].body)[16]
-        velocity[1] = 40;
+        SDK.noa.setVelocity(null, 40, null);
 
         setTimeout(() => this.button.setActive(false), 100);
     }

@@ -11,6 +11,10 @@ export default {
         return objUtils.values(hooks.noa.entities)[36];
     },
 
+    get getPhysicsBody () {
+        return objUtils.values(hooks.noa.entities)[30];
+    },
+
     get registry () {
         return objUtils.values(hooks.noa)[17];  
     },
@@ -36,13 +40,26 @@ export default {
     },
 
     get playerList() {
-        return Object.values(hooks.noa.bloxd.getPlayerIds()).filter(player => player !== 1 && this.safeGetHeldItem(player)).map(id => parseInt(id));
+        return objUtils.values(hooks.noa.bloxd.getPlayerIds()).filter(player => player !== 1 && this.safeGetHeldItem(player)).map(id => parseInt(id));
     },
 
     get doAttack () {
         let heldItem = this.safeGetHeldItem(1);
         let doAttack = heldItem?.doAttack || heldItem.breakingItem.doAttack;
         return doAttack.bind(heldItem);
+    },
+
+    setVelocity (x = null, y = null, z = null) {
+        let physicsBody = this.getPhysicsBody(1);
+        let velocity = objUtils.values(physicsBody)[16];
+
+        if (x !== null) velocity[0] = x;
+        if (y !== null) velocity[1] = y;
+        if (z !== null) velocity[2] = z;
+    },
+
+    isAlive (id) {
+        return objUtils.values(hooks.noa.entities)[37](id).isAlive;
     },
 
     touchingWall() {

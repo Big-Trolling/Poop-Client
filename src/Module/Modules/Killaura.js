@@ -52,8 +52,7 @@ export default class Killaura extends Module {
             SDK.noa.getHeldItem(1)?.trySwingBlock?.();
             SDK.noa.getMoveState(1)?.setArmsAreSwinging?.();
 
-            SDK.noa.doAttack(Object.values(hooks.noa.camera)[0], closestPlayer.id.toString(), this.getRandomBodyPart());
+            SDK.noa.doAttack(objUtils.values(hooks.noa.camera)[0], closestPlayer.id.toString(), this.getRandomBodyPart());
         }
-
     }
 }
