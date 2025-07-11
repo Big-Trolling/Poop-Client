@@ -55,7 +55,7 @@ export default class Button {
         // prevent toggling on drag
         this.circle.addEventListener('click', (e) => {
             if (!moved) {
-                this.onToggle();
+                this.toggle();
             }
             moved = false;
             e.stopPropagation();
