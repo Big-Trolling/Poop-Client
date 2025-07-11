@@ -2,8 +2,6 @@ import moduleManager from "./Module/moduleManager";
 import hooks from "./Utils/hooks";
 
 hooks.init();
-window.dih = hooks;
-
 moduleManager.getModByName("UI").enable();
 
 function render () {
