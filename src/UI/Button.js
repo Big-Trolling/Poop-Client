@@ -1,10 +1,10 @@
 import objUtils from "../Utils/objUtils";
 
 export default class Button {
-    constructor(name, x, y, onToggle = () => {}) {
+    constructor(name, x, y, onToggle = () => {}, active = false) {
         this.name = name;
         this.onToggle = onToggle;
-        this.isActive = false;
+        this.isActive = active;
         this.isDragging = false;
         this.dragThreshold = 10;
 
@@ -39,6 +39,8 @@ export default class Button {
             textAlign: 'center',
             userSelect: 'none',
         });
+
+        this.circle.style.borderColor = active ? this.activeColor : this.inactiveColor;
 
         this.shadow.appendChild(this.circle);
         document.body.appendChild(this.wrapper);

@@ -1,7 +1,7 @@
-import SDK from "../SDK/SDK";
-import hooks from "../Utils/hooks";
-import objUtils from "../Utils/objUtils";
-import Module from "./Module";
+import SDK from "../../SDK/SDK";
+import hooks from "../../Utils/hooks";
+import objUtils from "../../Utils/objUtils";
+import Module from "../Module";
 
 export default class Spider extends Module {
     constructor () {

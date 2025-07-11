@@ -1,6 +1,6 @@
-import SDK from "../SDK/SDK";
-import hooks from "../Utils/hooks";
-import Module from "./Module";
+import SDK from "../../SDK/SDK";
+import hooks from "../../Utils/hooks";
+import Module from "../Module";
 
 export default class Killaura extends Module {
     constructor () {
