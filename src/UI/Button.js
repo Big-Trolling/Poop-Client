@@ -1,12 +1,13 @@
 import objUtils from "../Utils/objUtils";
 
 export default class Button {
-    constructor(name, x, y, onToggle = () => {}, active = false) {
-        this.name = name;
-        this.onToggle = onToggle;
-        this.isActive = active;
+    constructor(module, x, y) {
+        this.name = module.name;
+        this.onToggle = module.toggle.bind(module);
+        this.isActive = module.isEnabled;
         this.isDragging = false;
         this.dragThreshold = 10;
+        this.module = module;
 
         this.activeColor = "green";
         this.inactiveColor = "red";
@@ -15,7 +16,7 @@ export default class Button {
         this.shadow = this.wrapper.attachShadow({ mode: 'closed' });
 
         this.circle = document.createElement('div');
-        this.circle.textContent = name;
+        this.circle.textContent = module.name;
 
         objUtils.assign(this.circle.style, {
             position: 'fixed',
@@ -40,7 +41,7 @@ export default class Button {
             userSelect: 'none',
         });
 
-        this.circle.style.borderColor = active ? this.activeColor : this.inactiveColor;
+        this.circle.style.borderColor = this.isActive ? this.activeColor : this.inactiveColor;
 
         this.shadow.appendChild(this.circle);
         document.body.appendChild(this.wrapper);
@@ -54,10 +55,22 @@ export default class Button {
         // prevent toggling on drag
         this.circle.addEventListener('click', (e) => {
             if (!moved) {
-                this.toggle();
+                this.onToggle();
             }
             moved = false;
             e.stopPropagation();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (this.module.keybind && e.key.toLocaleLowerCase() === this.module.keybind.toLocaleLowerCase()) {
+                this.toggle();
+            }
+        });
+
+        this.circle.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            let keybind = String(prompt("What Key do you want to bind this module to?"));
+            this.module.keybind = keybind[0];
         });
 
         this.circle.addEventListener('mousedown', (e) => {

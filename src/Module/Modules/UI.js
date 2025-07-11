@@ -13,7 +13,8 @@ export default class UI extends Module {
         if (!this.initialized) {
             let UIOffset = 100;
             moduleManager.modules.forEach(mod => {
-                let button = new Button(mod.name, UIOffset, UIOffset, mod.toggle.bind(mod), mod.isEnabled);
+                let button = new Button(mod, UIOffset, UIOffset);
+                mod.button = button;
                 this.buttons.push(button);
                 UIOffset += 50;
             })
