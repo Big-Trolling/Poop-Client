@@ -1,14 +1,14 @@
-import hooks from "./hooks";
-import objUtils from "./objUtils";
+import hooks from "../Utils/hooks";
+import objUtils from "../Utils/objUtils";
 
 export default { 
 
-    getPosition (id) {
-        return objUtils.values(hooks.noa.entities)[28](id);
+    get getPosition () {
+        return objUtils.values(hooks.noa.entities)[28];
     },
 
-    getMoveState (id) {
-        return objUtils.values(hooks.noa.entities)[36](id);
+    get getMoveState () {
+        return objUtils.values(hooks.noa.entities)[36];
     },
 
     get registry () {

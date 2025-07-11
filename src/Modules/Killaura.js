@@ -1,5 +1,5 @@
-import mathUtils from "../Utils/mathUtils";
-import noaUtils from "../Utils/noaUtils";
+import SDK from "../SDK/SDK";
+import hooks from "../Utils/hooks";
 import Module from "./Module";
 
 export default class Killaura extends Module {
@@ -23,24 +23,37 @@ export default class Killaura extends Module {
     }
 
     tryKill () {
-        let playerPos = noaUtils.getPosition(1);
-        noaUtils.playerList.forEach((player) => {
-            let targetPosition = noaUtils.getPosition(player);
-            if (!targetPosition) return;
+        const reach = 7;
+        const reachSq = reach * reach;
 
-            if (parseFloat(mathUtils.distanceBetweenSqrt(playerPos, targetPosition)) <= 7) {
+        const playerPos = SDK.noa.getPosition(1);
 
-                if (noaUtils.getHeldItem(1)?.trySwingBlock) {
-                    noaUtils.getHeldItem(1).trySwingBlock();
-                }
+        let closestPlayer = null;
+        let closestDistSq = reachSq;
 
-                if (noaUtils.getMoveState(1)?.setArmsAreSwinging) {
-                    noaUtils.getMoveState(1).setArmsAreSwinging(); 
-                }
+        SDK.noa.playerList.forEach((playerID) => {
+            const targetPos = SDK.noa.getPosition(playerID);
+            if (!targetPos) return;
 
-                let lookPos = mathUtils.normalizeVector([targetPosition[0] - playerPos[0], targetPosition[1] - playerPos[1], targetPosition[2] - playerPos[2]]);
-                noaUtils.doAttack(lookPos, player.toString(), this.getRandomBodyPart());
+            const dx = targetPos[0] - playerPos[0];
+            const dy = targetPos[1] - playerPos[1];
+            const dz = targetPos[2] - playerPos[2];
+            const distSq = dx * dx + dy * dy + dz * dz;
+
+            if (distSq < closestDistSq) {
+                closestDistSq = distSq;
+                closestPlayer = { id: playerID, pos: targetPos };
             }
-        })
+        });
+
+        if (closestPlayer) {
+            hooks.noa.inputs.down._events['primary-fire'](SDK.mouse.fakeMouseEvent());
+
+            SDK.noa.getHeldItem(1)?.trySwingBlock?.();
+            SDK.noa.getMoveState(1)?.setArmsAreSwinging?.();
+
+            SDK.noa.doAttack(Object.values(hooks.noa.camera)[0], closestPlayer.id.toString(), this.getRandomBodyPart());
+        }
+
     }
 }

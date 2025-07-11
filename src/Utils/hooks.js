@@ -13,8 +13,9 @@ const hooks = {
     },
 
     init() {
+        let randomID = Math.floor(Math.random() * 9999999 + 1)
         const webpackChunk = window.webpackChunkbloxd = window.webpackChunkbloxd || [];
-        webpackChunk.push([[Symbol()], {}, require => this.wpRequire = require]);
+        webpackChunk.push([[randomID], {}, require => this.wpRequire = require]);
         this.bloxdProps = objUtils.values(this.findModule("nonBlocksClient:")).find(prop => typeof prop == "object");
     },
 
