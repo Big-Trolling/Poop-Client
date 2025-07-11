@@ -1,4 +1,5 @@
 import objUtils from "../Utils/objUtils";
+import ShadowWrapper from "./ShadowWrapper";
 
 export default class Button {
     constructor(module, x, y) {
@@ -11,9 +12,6 @@ export default class Button {
 
         this.activeColor = "green";
         this.inactiveColor = "red";
-
-        this.wrapper = document.createElement('div');
-        this.shadow = this.wrapper.attachShadow({ mode: 'closed' });
 
         this.circle = document.createElement('div');
         this.circle.textContent = module.name;
@@ -43,8 +41,7 @@ export default class Button {
 
         this.circle.style.borderColor = this.isActive ? this.activeColor : this.inactiveColor;
 
-        this.shadow.appendChild(this.circle);
-        document.body.appendChild(this.wrapper);
+        ShadowWrapper.wrapper.appendChild(this.circle);
 
         this.attachEvents();
     }
@@ -59,12 +56,6 @@ export default class Button {
             }
             moved = false;
             e.stopPropagation();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (this.module.keybind && e.key.toLocaleLowerCase() === this.module.keybind.toLocaleLowerCase()) {
-                this.toggle();
-            }
         });
 
         this.circle.addEventListener('contextmenu', (e) => {
@@ -91,8 +82,8 @@ export default class Button {
                 this.endDrag(onMove, onUp, 'mouse');
             };
 
-            window.addEventListener('mousemove', onMove);
-            window.addEventListener('mouseup', onUp);
+            this.circle.addEventListener('mousemove', onMove);
+            this.circle.addEventListener('mouseup', onUp);
         });
 
         this.circle.addEventListener('touchstart', (e) => {
@@ -114,8 +105,8 @@ export default class Button {
                 this.endDrag(onMove, onEnd, 'touch');
             };
 
-            window.addEventListener('touchmove', onMove, { passive: false });
-            window.addEventListener('touchend', onEnd);
+            this.circle.addEventListener('touchmove', onMove, { passive: false });
+            this.circle.addEventListener('touchend', onEnd);
         }, { passive: false });
     }
 
@@ -137,11 +128,11 @@ export default class Button {
         this.isDragging = false;
         this.circle.style.cursor = 'grab';
         if (type === 'mouse') {
-            window.removeEventListener('mousemove', onMove);
-            window.removeEventListener('mouseup', onEnd);
+            this.circle.removeEventListener('mousemove', onMove);
+            this.circle.removeEventListener('mouseup', onEnd);
         } else {
-            window.removeEventListener('touchmove', onMove);
-            window.removeEventListener('touchend', onEnd);
+            this.circle.removeEventListener('touchmove', onMove);
+            this.circle.removeEventListener('touchend', onEnd);
         }
     }
 
@@ -153,9 +144,5 @@ export default class Button {
         this.isActive = state;
         this.circle.style.borderColor = state ? this.activeColor : this.inactiveColor;
         this.onToggle(state);
-    }
-
-    destroy() {
-        this.wrapper.remove();
     }
 }

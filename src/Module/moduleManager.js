@@ -13,4 +13,11 @@ export default {
         return this.modules.find(mod => mod.name === name);
     },
 
+    handleKeyPress (key) {
+        this.modules.forEach(mod => {
+            if (mod?.keybind?.toLowerCase?.() == key.toLowerCase()) {
+                mod.button.setActive(mod.isEnabled);
+            }
+        })
+    }
 }

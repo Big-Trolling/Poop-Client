@@ -13,4 +13,8 @@ function render () {
     requestAnimationFrame(render);
 }
 
+document.addEventListener("keydown", (event) => {
+    moduleManager.handleKeyPress(event.key);
+});
+
 render();

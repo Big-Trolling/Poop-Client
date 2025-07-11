@@ -1,13 +1,5 @@
 export default {
-    grab () {
-
-    },
-
-    release () {
-
-    },
-
-    fakeMouseEvent () {
+    fakeMouseEvent (type) {
         let spoofedEvent = {
 			button: 0,
 			buttons: 1,
@@ -16,12 +8,12 @@ export default {
 			screenX: Math.floor(Math.random() * 999 + 1),
 			screenY: Math.floor(Math.random() * 999 + 1),
 			target: document.querySelector('#noa-container'),
-			type: "mousedown",
+			type: type,
 			isTrusted: true,
 			view: window,
 			bubbles: true,
 			cancelable: true,
-            timeStamp: Date.now(),
+            timeStamp: performance.now(),
 	    };
 
         spoofedEvent.prototype = MouseEvent.prototype;
