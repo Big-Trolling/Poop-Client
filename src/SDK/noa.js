@@ -3,16 +3,16 @@ import objUtils from "../Utils/objUtils";
 
 export default { 
 
-    get getPosition () {
-        return objUtils.values(hooks.noa.entities)[28];
+    getPosition (id) {
+        return hooks.noa.entities.getState(id, 'position').position;
     },
 
     get getMoveState () {
         return objUtils.values(hooks.noa.entities)[36];
     },
 
-    get getPhysicsBody () {
-        return objUtils.values(hooks.noa.entities)[30];
+    getPhysicsBody (id) {
+        return hooks.noa.entities.getState(id, 'physics').body;
     },
 
     get registry () {
@@ -28,7 +28,7 @@ export default {
     },
 
     get getHeldItem () {
-        return objUtils.values(hooks.noa.entities)[39];
+        return objUtils.values(hooks.noa.entities).find(fn => fn?.length == 1 && fn?.toString()?.length < 13 && fn?.toString().includes(').'))
     },
 
     safeGetHeldItem(id) {

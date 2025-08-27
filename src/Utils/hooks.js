@@ -13,9 +13,11 @@ const hooks = {
     },
 
     init() {
-        let randomID = Math.floor(Math.random() * 9999999 + 1)
-        const webpackChunk = window.webpackChunkbloxd = window.webpackChunkbloxd || [];
-        webpackChunk.push([[randomID], {}, require => this.wpRequire = require]);
+        let winDescriptors = Object.getOwnPropertyDescriptors(window);
+        let wpName = Object.keys(winDescriptors).find(key => winDescriptors[key]?.set?.toString().includes("++"));
+        let wpInstance = window[wpName] = window[wpName];
+        let randomID = Math.floor(Math.random() * 9999999 + 1);
+        wpInstance.push([[randomID], {}, require => this.wpRequire = require]);
         this.bloxdProps = objUtils.values(this.findModule("nonBlocksClient:")).find(prop => typeof prop == "object");
     },
 

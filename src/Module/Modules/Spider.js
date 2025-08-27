@@ -8,7 +8,7 @@ export default class Spider extends Module {
     }
 
     onRender () {
-        if (SDK.noa.touchingWall() && hooks.noa.inputs.state.jump) {
+        if (hooks.noa.inputs.state.jump && SDK.noa.touchingWall()) {
             SDK.noa.setVelocity(null, 5, null);
         }
     }

@@ -1,6 +1,8 @@
 import moduleManager from "./Module/moduleManager";
+import SDK from "./SDK/SDK";
 import hooks from "./Utils/hooks";
 
+window.poop = {SDK, hooks};
 hooks.init();
 moduleManager.getModByName("UI").enable();
 
